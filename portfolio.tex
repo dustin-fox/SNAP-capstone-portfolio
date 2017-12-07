@@ -1,0 +1,318 @@
+%Based on the code of Yiannis Lazarides and Jean-Philippe Eisenbarth
+%http://tex.stackexchange.com/questions/42602/software-requirements-specification-with-latex
+%http://tex.stackexchange.com/users/963/yiannis-lazarides
+%Also based on the template of Karl E. Wiegers
+%http://www.se.rit.edu/~emad/teaching/slides/srs_template_sep14.pdf
+%http://karlwiegers.com
+
+\title{PROJECT_SNAP_PORTFOLIO.pdf}
+
+\documentclass{scrreprt}
+\usepackage{scrhack}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{wrapfig}
+\def\myversion{1.3 }
+\date{}
+\usepackage{hyperref}
+\usepackage{array}
+\begin{document}
+
+\begin{flushright}
+    \rule{16cm}{5pt}\vskip1cm
+    \begin{bfseries}
+        \Huge{PROJECT SNAP\\ PORTFOLIO}\\
+        \vspace{2cm}
+        \LARGE{Version \myversion}\\
+        \vspace{2cm}
+        Prepared by:\\
+        Dylan Carlson,\\
+        Dustin Fox, \\
+        Andrew Rose\\
+        \vspace{2cm}
+        University of Idaho\\
+        Capstone Design\\
+        \vspace{2cm}
+        \today\\
+    \end{bfseries}
+\end{flushright}
+
+
+
+\tableofcontents
+
+
+\chapter{Meeting Minutes}
+
+
+\chapter{Project Learning}
+\section{Technologies}
+For our project we are having to learn a few new technologies in order to succesfully complete this project. 
+\subsection{OpenAL}
+Since our project deals heavily with being able to manipulate audio, we needed a powerful Audio library, which is why we are using OpenAL. OpenAL is a very powerful, 3D audio library which will allow us to communicate to the user how far away objects through sound. 
+
+\subsection{OpenCV}
+We also needed a library that will be able to convert our depth data we recieve from our Intel RealSense hardware into actual "Mat" objects that will be able to communicate with our multiple audio sources from OpenAL. For this purpose, we will be using OpenCV which is a library for real-time computer vision. 
+
+\subsection{Unity}
+Unity will the game engine we will be using to create our test bed in order to test different audio configurations. Within our test bed, we will implement a first-person module of a camera moving by multiple objects, that will represent what it is like moving around the real world with the hardware. It is important that our Visual Audio Engine will work seamlessly between the hardware and our test bed. Within Unity, there were multiple learning curves for us such as how to create different types of 3-D maps and creating our main menu within Unity.
+
+\subsubsection{Map Creation}
+One important component to our Unity test bed, is our unique testing maps. Our goal to complete our project with three different testing maps that each provide a separate challenge to the user. In order to create these maps, there was a learning curve in how to create 3-D environments in Unity that implement dynamic models and a basic physics engine.
+
+\subsubsection{Main Menu}
+Along with our testing maps, we wanted the main menu and user interface to also be done through Unity. To incorporate this, there was a large amount of research on how to allow users to switch between different scenes, load in different backend audio configuration files, and be able to create basic tutorials from the main menu.
+
+\subsection{Documenting/Learning Current Codebase}
+The previous group's backend file has little documentation. When looking through the backend file we were confused on how certain functions work. On top of learning about the previous groups own function's, we are also trying to learn about how certain OpenAL and OpenCV functions work. We decided it would be best if we took some time to look through the backend file and start documenting what we think each function does. So far, we have a write up of what some of the functions in the backend file do. We are planning on meeting with Collin who was a student who worked on the project last year. If he can walk us through how the backend file operates and answer some of our questions, we can start documenting more and make some more forward progress.
+
+\section{Agile Tools}
+Our client Dan Schneider plans on having future capstone groups continue the work that we have done. He even eventually wants to create a company based on this software. For that reason we want the project to be set up the right way. That is, the future groups will be able to quickly and easily get up to speed and understand the intricacies of the system well enough to make meaningful contributions. For this to be possible we will be using a few different tools that are available on Github.
+\subsection{The projectSNAP Organization}
+Github allows you to create organizations that are essentially accounts that control multiple repositories in addition to multiple teams within the organization. We created an organization called projectSNAP and a team within that organization called the-lone-wanderers. The benefit of being a part of a team is that when we create pull requests and want to select reviewers we can easily just assign the whole team to review in one click.\\
+\pagebreak
+\subsection{Our Repositories}
+Within the projectSNAP organization we also made the decision to break the previous group's repository into multiple repositories. The previous group had a repository called "SONARmaster" that contained 5 separate software projects along with a bunch of binary files and files that are no longer in use. This abundance of unused files caused the repository to be over 3 gigabytes in size. Once we broke the repository out into three smaller repositories SNAP-test-bed SNAP-render-plugin and SNAP-visual-audio-engine we also added .gitignore files to make sure that we don't accidentally commit binary files or IDE settings files to source control.\\
+
+\includegraphics[width=\textwidth]{projectSNAP.png}\\
+\pagebreak
+\subsection{Kabana Board}
+Another cool feature of github is the ability to use a Kabana Style To-Do board that holds all of our current pull requests and issues on the current project. This allows for a quick easy view of our progress, what needs to be reviewed, or what tasks someone could pick up.\\
+\includegraphics[width=\textwidth]{kabana.png}\\
+
+
+\chapter{Design Goals}
+
+\section{Visual Audio Engine Design}
+\subsection{The Current State of the Code}
+The previous group created what they called "The Backend" in c++ using OpenCV to analyze a depth map frame and from that information use OpenAL to create 3D audio sound sources around the user to inform them about objects in front of them. Here is a photo of how they're design is supposed to work:\\
+
+\includegraphics[width=\textwidth]{backendDiagram.PNG}\\
+\subsection{Areas for Improvement}
+\subsubsection{New Name}
+We made the decision to rename The Backend to the Visual Audio Engine (VAE) to avoid confusion with common web development terms 'frontend' and 'backend'.
+\subsubsection{More Documentation}
+Very little of the code is actually documented and much of it is nontrivial and hard to figure out. This leads to a very steep learning curve when new developers attempt to improve upon it.\\
+\subsubsection{Modular Class Structure}
+One of our core requirements for this project is to be able to easily modify every aspect of the visual audio algorithms that we use to figure out the best possible way to translate visual information into audio information. For this to be possible we need the VAE functionality to be modular. To accomplish this we plan on breaking the algorithms and functionality out of the "main" function and into a more modular class hierarchy that we can utilize to accomplish the level of customization that our client requires.
+
+\section{Test Bed Design}
+For the front end of this project, our main goal is to create an effective user test bed to allow for users to try different audio configurations that will allow our client to receive critical user data about which audio configurations work the best. This test bed will have the following components: 
+
+\subsection{Installation and Distribution}
+
+\begin{itemize}
+  \item Everything needed to run the simulation must be packaged together in one downloadable file.
+  \item Must include an easy installation script that minimizes the need for user input and installs all required dll files. (Essentially a single “Install” button.)
+  \item Ideally would have a GUI installation process.
+  \item Must find an easy way to host and distribute the installation file.
+\end{itemize}
+
+\subsection{Logging Component}
+
+\begin{itemize}
+  \item Keep info from each session such as number of collisions, time taken to complete map, configurations used, map/test used, etc.
+  \item Allow for easy data export and analytics on test data.
+\end{itemize}
+
+\subsection{Main Menu}
+
+
+\begin{itemize}
+  \item Handle switching between unity scenes and sub-menus.
+  \item Provide file selection dialogs for loading configuration files.
+  \item Contain useful tutorials and manual pages.
+\end{itemize}
+
+\includegraphics[width=\textwidth]{MainMenu.png}\\
+\captionof{figure}{A current look at our Main Menu design in Unity.}
+
+
+
+\subsection{Character Controller/Headset Simulator}
+
+\begin{itemize}
+  \item  Provide robust first person controller that can simulate human navigation.
+  \item Keep headset in sync with hardware.
+\end{itemize}
+
+\subsection{Maps/Tests}
+
+\begin{itemize}
+  \item  Create three test maps that each present a different obstacle to the user.
+  \item The models' positions/coordinates must be randomized each run to allow for effective navigation testing.
+\end{itemize}
+
+
+\includegraphics[width=\textwidth]{HallwayMap.png}\\
+\captionof{figure}{A bird's eye view of the current development of our hallway map.}
+
+
+
+\subsection{Back end}
+
+\begin{itemize}
+  \item  Reconstruct the previous group's back end source code to allow for OpenAL to be configurable.
+  \item Maximize source resolution.
+  \item Optimize shared memory block communication.
+  \item Keep all aspects of the back end compatible with the hardware.
+  
+\end{itemize}
+
+\section{User Flow Chart}
+
+\includegraphics[width=\textwidth]{Flowchart.png}\\
+\captionof{figure}{A user flow chart that shows how all the components of our main menu will work for the user.}
+
+\section{Design Goal Timeline}
+
+\includegraphics[width=\textwidth]{timeline.png}\\
+\captionof{figure}{A timeline that shows our current progress and what we will accomplish next semester.}
+
+
+
+\chapter{Specification} 
+
+\section{Client Interview}
+\begin{enumerate}
+\item Do we need a license for unity?
+\begin{itemize}
+  \item No, we can get free licences.
+\end{itemize}
+   
+\item What is your end goal for this project?
+\begin{itemize}
+  \item Executable that can be distributed
+  \item All variables and wave functions must be variables that can be changed in a file or possibly by an in-game menu
+\end{itemize}
+
+\item How often would he like to meet?
+\begin{itemize}
+  \item As often as we need him. We can text him with any questions.
+\end{itemize}
+  
+\item What are your requirements for an effective test bed?
+\begin{itemize}
+  \item Variables that can be easily changed
+  \item Executable that works on as many different platforms as possible
+  \item Completely compatible with physical prototypes
+\end{itemize}
+
+\item Will we be working on the prototype hardware as well?
+\begin{itemize}
+\item Yes, we will be working on both hardware and software.
+\item He would like us to help finish his prototype by October 21st
+\end{itemize}
+
+\item Is there any sort of budget?
+\begin{itemize}
+\item Lets just say under 1000 
+\end{itemize}
+
+\item What are the exact software specifics?
+\begin{itemize}
+\item We will learn about the software from the overleaf document
+\item Keep the same diagram (virtual front end and backend) from https://hackaday.io/project/27055-snap-augmented-echolocation
+\end{itemize}
+
+\item Any libraries or other tools we should familiarize ourselves with other than Unity?
+\begin{itemize}
+\item openAL - find out if this has enough power do do what we want
+\item openCV
+\end{itemize}
+
+\item How do we get access to the preexisting code base?
+\begin{itemize}
+\item https://github.com/TeamSONAR/
+\end{itemize}
+
+\item Situation on SAPA?
+\begin{itemize}
+\item We need to find out where we sign the form.
+\end{itemize}
+\end{enumerate}
+
+\section{Specifications} 
+\begin{itemize}
+\item Create a distributable executable that can be downloaded and installed easily.
+  \begin{itemize}
+    \item Since the plan is to have many users use the simulation for testing purposes we need to make sure that anyone can easily install it.
+  \end{itemize}
+\item Create a menu system that users can easily maneuver.
+  \begin{itemize}
+    \item Users will be using a menu system built in Unity to create configurations, import configurations, and start new test runs, so making the menu system easy to use is important.
+  \end{itemize}
+\item Create test maps that are simple and rigorous to collect user collision data.
+  \begin{itemize}
+    \item We want to create simple maps for basic use of the visual audio engine, but users should be able to make their own maps for other testing purposes.
+  \end{itemize}
+\item Software must be compatible with physical hardware prototype.
+  \begin{itemize}
+    \item We want to be able to run this software on the physical headset so we can scan real life environments instead of only running tests on virtual environments.
+  \end{itemize}
+\item Make the visual audio engine modular to allow for users to create custom configurations easily.
+\begin{itemize}
+    \item We need to be able to change different variables in the visual audio engine easily so users can make configurations easily with in the Unity configuration menu.
+  \end{itemize}
+\item Create documentation of visual audio engine that is easy to understand.
+  \begin{itemize}
+    \item Future senior capstone groups and other people interested in this project will need documentation of what we accomplished so they know how the current state of the program works.
+  \end{itemize}
+\end{itemize}
+
+\chapter{Analysis of Alternatives}
+\section{OpenAL}
+OpenAL is heavily used throughout this project. It was developed in 2000 by Creative and the current version 1.1 was created in 2009. Since then Creative went proprietary with the technology. That means openAL in it's vanilla form like we are using it is vastly unsupported and could cause problems for us in the future. Lucky for us there are a few open source options that have improved upon the original OpenAL.
+\subsection{OpenAL Soft}
+OpenAL Soft is an LGPL-licensed, cross-platform, software implementation. The library is meant as a compatible update/replacement to the deprecated OpenAL Sample Implementation, as well as a free alternative to the now-proprietary OpenAL. OpenAL Soft supports mono, stereo, 4-channel, 5.1, 6.1, 7.1 and HRTF output. The biggest benefit of OpenAL soft is it is forward/backward compatible with the current OpenAL and it is supported while still being free an non proprietary.\\
+We are currently looking into implementing the current functionality using OpenAL Soft.
+
+\section{Unity}
+Unity seems to be a robust enough game engine for our purposes, and if we continue to use Unity we will spend less time transitioning the previous groups work to another game engine. However, we did spend time to make sure we covered any other possible alternatives.
+
+\subsection{Unreal Engine}
+
+\begin{itemize}
+\item The is no paid version, the main version is free but requires a five percent royalty charge.
+\item Supports C++ which is more widely known by our group
+\item Increased graphical abilities
+\end{itemize}
+
+\chapter{Deployment Plan}
+One of the main goals of the project has been to create an easily accessible test bed that anyone can download and try out to help with testing.
+\section{Executable}
+We must have an executable file that is pre packaged with all the dlls and other extra libraries that a user will need to run the simulator.
+\section{Installation} We want the installation to be easy and require minimal user input. We will probably have a GUI installation window to make installing easier for the user.\\
+\includegraphics[width=\textwidth]{installsnap.png}
+
+\chapter{Experimental Design}
+\section{OpenAL Sound Source Resolution}
+One thing that our client mentioned is wanting to test the limits and capacities of the current prototype in how many sound sources can we reasonably generate before performance becomes and issue. We are not currently in a position with the VAE that we can actually start testing the audio source performance but this is definitely something we will be looking into as we make more progress.
+\section{Stereo Visual Odometry}
+SVO Is a technique using two cameras and a lot of geometry to pinpoint distances and locations of objects. This is similar to how the human brain uses our two eyes for depth perception. Our client expressed interest in this technology and would like to look into it in the future. We are going to build our testbed in such a way as to allow for integration of this technique and others. We plan on doing some testing next semester to see how viable this technology can be.
+
+\chapter{Appendices}
+\pagebreak
+    
+\section{SnapShot \#1}
+
+\includegraphics[width=\textwidth]{SnapShot.png}\\
+\captionof{figure}{Our design prototype for our first SnapShot project board.}
+
+\section {SnapShot \#2}
+
+\includegraphics[width=\textwidth]{SnapShot2.png}\\
+\captionof{figure}{Our design prototype for our Second SnapShot project board.}
+
+\section{Design Review \#1}
+\section{Backend Documentation Notes}
+\section{Main Menu Design Notes}
+
+
+\end{document}
